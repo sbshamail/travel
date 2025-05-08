@@ -5,10 +5,11 @@ import Nav from '../components/Nav';
 import { Footer } from '../components/Footer';
 import { V, T } from '../@core/tag';
 import { useTheme } from '../@core/theme/themeContext';
+import { Text } from 'react-native';
 
 // import LoginScreen from './Login';
 export default function Home() {
-  // const { theme, toggleTheme, ct } = useTheme();
+  const { theme, toggleTheme, ct } = useTheme();
   // console.log(theme);
   const insets = useSafeAreaInsets();
   return (

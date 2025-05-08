@@ -2,10 +2,9 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home from '../screens/Home';
-// import LoginScreen from "../screens/Login";
-// import { V } from '../@core/tag';
-// import { useTheme } from '../@core/theme/themeContext';
-// import LoginScreen from '@/screens/Login';
+import LoginScreen from '../screens/Login';
+import { V } from '../@core/tag';
+import { useTheme } from '../@core/theme/themeContext';
 
 export type RootStackParamList = {
   Home: undefined;
