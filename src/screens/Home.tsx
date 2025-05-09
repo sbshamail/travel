@@ -6,6 +6,7 @@ import { Footer } from '../components/Footer';
 import { V, T } from '../@core/tag';
 import { useTheme } from '../@core/theme/themeContext';
 import { Text } from 'react-native';
+import LoginScreen from './Login';
 
 // import LoginScreen from './Login';
 export default function Home() {
@@ -14,15 +15,10 @@ export default function Home() {
   const insets = useSafeAreaInsets();
   return (
     <>
-      <SafeAreaView className="bg-background flex-1 ">
-        {/* <StatusBar backgroundColor={ct.background} style={"auto"} /> */}
-        {/* <V className="flex-1">
-          <Nav />
-          <LoginScreen />
-
-          <Footer />
-        </V> */}
-      </SafeAreaView>
+      <V className="flex-1">
+        <Nav />
+        <LoginScreen />
+      </V>
     </>
   );
 }

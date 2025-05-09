@@ -5,8 +5,8 @@ import { V, T, TInput, Button } from '../@core/tag';
 import { PhoneInput } from '../components/dataEntry/PhoneInput';
 //firebase
 import { signInWithEmailAndPassword, signInWithPhoneNumber } from 'firebase/auth';
-// import { auth, db } from "../lib/firebase";
-
+import { auth } from '@/lib/firebase';
+import Constants from 'expo-constants';
 export default function LoginScreen() {
   const { ct } = useTheme();
   const [isLogin, setIsLogin] = useState(true);
@@ -14,6 +14,8 @@ export default function LoginScreen() {
   const [phone, setPhone] = useState({ country: '92', number: '' });
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { apiKey, projectId, authDomain, storageBucket, messagingSenderId, appId } =
+    Constants.expoConfig?.extra ?? {};
 
   const handleSubmit = async () => {
     // if (
@@ -26,12 +28,8 @@ export default function LoginScreen() {
     // }
     const fullPhone = `+${phone.country}${phone.number}`;
     try {
-      // const confirmation = await signInWithEmailAndPassword(
-      //   auth,
-      //   fullname,
-      //   password
-      // );
-      // console.log(confirmation);
+      const confirmation = await signInWithEmailAndPassword(auth, fullname, password);
+      console.log(confirmation);
       // const confirmation = await signInWithPhoneNumber(auth, fullPhone);
       // console.log("OTP Sent:", confirmation);
       // const saveUserToFirestore = async (uid: string) => {

@@ -1,11 +1,14 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './RootNavigator';
+import { ThemeProvider } from '@/@core/theme/themeContext';
 
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <RootNavigator />
+      <ThemeProvider>
+        <RootNavigator />
+      </ThemeProvider>
     </NavigationContainer>
   );
 };
