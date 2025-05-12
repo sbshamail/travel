@@ -3,11 +3,13 @@ import { Alert, Linking } from 'react-native';
 import { useTheme } from '../@core/theme/themeContext';
 import { V, T, TInput, Button } from '../@core/tag';
 import { PhoneInput } from '../components/dataEntry/PhoneInput';
+import Constants from 'expo-constants';
 //firebase
 import { signInWithEmailAndPassword, signInWithPhoneNumber } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import Constants from 'expo-constants';
+import { auth, app } from '@/lib/firebase/firebase.config';
 export default function LoginScreen() {
+  console.log('apps', app);
+
   const { ct } = useTheme();
   const [isLogin, setIsLogin] = useState(true);
   const [fullname, setFullname] = useState('');
@@ -16,7 +18,6 @@ export default function LoginScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const { apiKey, projectId, authDomain, storageBucket, messagingSenderId, appId } =
     Constants.expoConfig?.extra ?? {};
-
   const handleSubmit = async () => {
     // if (
     //   (!isLogin && !fullname.trim()) ||
@@ -28,8 +29,8 @@ export default function LoginScreen() {
     // }
     const fullPhone = `+${phone.country}${phone.number}`;
     try {
-      const confirmation = await signInWithEmailAndPassword(auth, fullname, password);
-      console.log(confirmation);
+      // const confirmation = await signInWithEmailAndPassword(auth, fullname, password);
+      // console.log(confirmation);
       // const confirmation = await signInWithPhoneNumber(auth, fullPhone);
       // console.log("OTP Sent:", confirmation);
       // const saveUserToFirestore = async (uid: string) => {
