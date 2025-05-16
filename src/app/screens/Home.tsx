@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import Nav from '../components/Nav';
-import { Footer } from '../components/Footer';
-import { V, T } from '../@core/tag';
-import { useTheme } from '../@core/theme/themeContext';
+import Nav from '../../components/Nav';
+import { Footer } from '../../components/Footer';
+import { V, T } from '../../@core/tag';
+import { useTheme } from '../../@core/theme/themeContext';
 import { Text } from 'react-native';
-import LoginScreen from './Login';
+import LoginScreen from './auth/Login';
 
 // import LoginScreen from './Login';
 export default function Home() {

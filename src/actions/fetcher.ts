@@ -5,6 +5,7 @@ type FetcherOptions = {
   body?: any;
   headers?: Record<string, string>;
   token?: string;
+  setLoading?: (b: boolean) => void;
 };
 
 export async function apiFetcher<T = any>({
@@ -14,12 +15,15 @@ export async function apiFetcher<T = any>({
   body,
   headers = {},
   token,
+  setLoading,
 }: FetcherOptions): Promise<T> {
   const finalHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
     ...headers,
   };
-  console.log(domain);
+  if (setLoading) {
+    setLoading(true);
+  }
   if (token) {
     finalHeaders.Authorization = `Bearer ${token}`;
   }
@@ -29,7 +33,9 @@ export async function apiFetcher<T = any>({
     headers: finalHeaders,
     body: body ? JSON.stringify(body) : undefined,
   });
-
+  if (setLoading) {
+    setLoading(false);
+  }
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: res.statusText }));
     throw new Error(error.message || 'API error');
