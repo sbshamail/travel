@@ -1,32 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Dimensions } from 'react-native';
 import { V, T } from '../../@core/tag';
 import { Button } from '../../@core/tag/Button';
 import { useTheme } from '../../@core/theme/themeContext';
+import GooglePlacesAutoComplete from '@/components/project/GooglePlacesAutoComplete';
 
 const { width, height } = Dimensions.get('window');
 
 export default function SelectRouteScreen() {
   const { ct } = useTheme();
-  const mapRef = useRef(null);
-  const [selecting, setSelecting] = useState<'from' | 'to'>('from');
+  const mapRef = useRef<MapView>(null);
+
+  const [selecting, setSelecting] = useState<'from' | 'to' | null>(null);
   const [from, setFrom] = useState(null);
   const [to, setTo] = useState(null);
+  const [region, setRegion] = useState({
+    latitude: 33.6844,
+    longitude: 73.0479,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
 
-  const handlePlaceSelect = (data, details) => {
-    const location = {
-      latitude: details.geometry.location.lat,
-      longitude: details.geometry.location.lng,
-    };
-    if (selecting === 'from') {
-      setFrom(location);
-      mapRef.current?.animateToRegion({ ...location, latitudeDelta: 0.01, longitudeDelta: 0.01 });
-    } else {
-      setTo(location);
-      mapRef.current?.animateToRegion({ ...location, latitudeDelta: 0.01, longitudeDelta: 0.01 });
-    }
+  const handleConfirm = () => {
+    if (!region) return;
+    if (selecting === 'from') setFrom(region);
+    else if (selecting === 'to') setTo(region);
+    setSelecting(null); // close selection mode
   };
 
   return (
@@ -34,59 +34,44 @@ export default function SelectRouteScreen() {
       <MapView
         ref={mapRef}
         style={{ width, height }}
-        initialRegion={{
-          latitude: 33.6844,
-          longitude: 73.0479,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }}>
-        {from && (
-          <Marker
-            draggable
-            coordinate={from}
-            pinColor="green"
-            onDragEnd={(e) => setFrom(e.nativeEvent.coordinate)}
-          />
-        )}
-        {to && (
-          <Marker
-            draggable
-            coordinate={to}
-            pinColor="red"
-            onDragEnd={(e) => setTo(e.nativeEvent.coordinate)}
-          />
-        )}
+        provider={PROVIDER_GOOGLE}
+        initialRegion={region}
+        onRegionChangeComplete={setRegion}>
+        {from && <Marker coordinate={from} pinColor="green" />}
+        {to && <Marker coordinate={to} pinColor="red" />}
       </MapView>
 
-      <V className="absolute left-4 right-4 top-8 rounded-xl bg-white shadow-lg">
-        {/* <GooglePlacesAutocomplete
-          placeholder={selecting === 'from' ? 'Select From Location' : 'Select To Location'}
-          onPress={handlePlaceSelect}
-          fetchDetails
-          query={{
-            key: 'YOUR_GOOGLE_API_KEY',
-            language: 'en',
-          }}
-          styles={{
-            textInput: {
-              borderRadius: 10,
-              fontSize: 16,
-            },
-          }}
-        /> */}
-      </V>
-
-      <V className="absolute bottom-10 left-4 right-4 flex-row justify-between px-4">
-        <Button
-          variant={selecting === 'from' ? 'primary' : 'outline'}
-          onPress={() => setSelecting('from')}>
-          Set From
-        </Button>
-        <Button
-          variant={selecting === 'to' ? 'primary' : 'outline'}
-          onPress={() => setSelecting('to')}>
-          Set To
-        </Button>
+      {/* Fixed marker pointer */}
+      {selecting && (
+        <V className="absolute left-1/2 top-1/2 z-10 -ml-4  bg-transparent">
+          <T className="mb-2 text-center text-sm font-semibold text-muted">
+            Move map to select {selecting === 'from' ? 'Start' : 'Destination'}
+          </T>
+          <V className="h-8 w-8 rounded-full border-[4px] border-white bg-blue-600 shadow" />
+        </V>
+      )}
+      <GooglePlacesAutoComplete
+        selecting={selecting}
+        mapRef={mapRef}
+        setFrom={setFrom}
+        setTo={setTo}
+      />
+      {/* Bottom buttons */}
+      <V className="absolute bottom-10 left-4 right-4 gap-4 bg-transparent px-4">
+        {!selecting ? (
+          <V className="flex-row justify-between bg-transparent">
+            <Button variant="primary" onPress={() => setSelecting('from')}>
+              Set From
+            </Button>
+            <Button variant="primary" onPress={() => setSelecting('to')}>
+              Set To
+            </Button>
+          </V>
+        ) : (
+          <Button variant="primary" onPress={handleConfirm}>
+            <T>Confirm {selecting === 'from' ? 'From' : 'To'} Location</T>
+          </Button>
+        )}
       </V>
     </V>
   );
