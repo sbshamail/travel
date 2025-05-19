@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import { useTheme } from '../../../@core/theme/themeContext';
-import { V, T, TInput, Button } from '../../../@core/tag';
+import { V, T, TInput } from '../../../@core/tag';
+import { Button } from '../../../@core/tag/Button';
 import { PhoneInput } from '../../../components/dataEntry/PhoneInput';
 import { registerUser } from '@/actions/auth';
 import { OtpModal } from '../../screenComponents/Modals/OtpModal';

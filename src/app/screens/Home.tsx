@@ -7,6 +7,7 @@ import { V, T } from '../../@core/tag';
 import { useTheme } from '../../@core/theme/themeContext';
 import { Text } from 'react-native';
 import LoginScreen from './auth/Login';
+import DriverLocationScreen from './DriverLocationScreen';
 
 // import LoginScreen from './Login';
 export default function Home() {
@@ -17,7 +18,8 @@ export default function Home() {
     <>
       <V className="flex-1">
         <Nav />
-        <LoginScreen />
+        <DriverLocationScreen />
+        {/* <LoginScreen /> */}
       </V>
     </>
   );
