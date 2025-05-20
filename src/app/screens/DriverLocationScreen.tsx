@@ -21,7 +21,7 @@ export default function SelectRouteScreen() {
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
-
+  console.log({ from, to });
   const handleConfirm = () => {
     if (!region) return;
     if (selecting === 'from') setFrom(region);

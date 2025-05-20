@@ -14,6 +14,7 @@ export default function Home() {
   const { theme, toggleTheme, ct } = useTheme();
   // console.log(theme);
   const insets = useSafeAreaInsets();
+
   return (
     <>
       <V className="flex-1">
