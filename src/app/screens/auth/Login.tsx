@@ -5,9 +5,12 @@ import { Button } from '../../../@core/tag/Button';
 import { PhoneInput } from '../../../components/dataEntry/PhoneInput';
 import { loginUser } from '@/actions/auth';
 
-import { useAppNavigation } from '@/navigation/useAppNavigation';
+import { useAppNavigation } from '@/app/navigation/useAppNavigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { Loader } from '@/components/loader/Loader';
 
 export default function LoginScreen() {
+  const { login } = useAuth();
   const navigation = useAppNavigation();
 
   const [phone, setPhone] = useState({ country: '92', number: '' });
@@ -29,8 +32,8 @@ export default function LoginScreen() {
 
       const res = await loginUser(data, setLoading);
 
-      if (res.success) {
-        navigation.navigate('Home');
+      if (res.success && res.token) {
+        login(res);
         handleClose();
       }
     } catch (err: any) {
@@ -41,6 +44,7 @@ export default function LoginScreen() {
 
   return (
     <>
+      <Loader loading={loading} />
       <V className="flex-1 items-center justify-center px-4">
         <V className="w-full ">
           <T className="mb-6 text-center text-2xl font-bold">Login</T>

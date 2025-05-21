@@ -6,7 +6,7 @@ import { Button } from '../../../@core/tag/Button';
 import { PhoneInput } from '../../../components/dataEntry/PhoneInput';
 import { registerUser } from '@/actions/auth';
 import { OtpModal } from '../../screenComponents/Modals/OtpModal';
-import { useAppNavigation } from '@/navigation/useAppNavigation';
+import { useAppNavigation } from '@/app/navigation/useAppNavigation';
 
 export default function RegisterScreen() {
   const { ct } = useTheme();
