@@ -24,11 +24,15 @@ export const T = ({ children, className, ...props }: TextProps) => (
 interface TInputType extends TextInputProps {
   theme?: Record<styleKey, string>;
   className?: ClassNameType;
+  error?: Record<string, string | any>;
 }
-export const TInput = ({ theme, className, ...props }: TInputType) => (
-  <TextInput
-    placeholderTextColor={theme?.['muted-foreground'] ?? '#A1A1AA'}
-    className={`border-border text-foreground bg-accent w-full rounded-xl border p-3 ${className}`}
-    {...props}
-  />
+export const TInput = ({ theme, className, error, ...props }: TInputType) => (
+  <>
+    <TextInput
+      placeholderTextColor={theme?.['muted-foreground'] ?? '#A1A1AA'}
+      className={`w-full rounded-xl border border-border bg-accent p-3 text-foreground ${className}`}
+      {...props}
+    />
+    {error && <T className="text-red-500">{error?.message}</T>}
+  </>
 );

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { TOKEN_KEY, getSorageValue, removeSorageValue, storeValue } from '../utils/asyncStorage';
 import { Alert } from 'react-native';
+import { Toastify } from '@/components/toast/Toastify';
 
 interface AuthContextType {
   token: string | null;
@@ -23,18 +24,26 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<Record<string, any> | null>(null);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
+  const handleIsAuth = async () => {
+    const token = await getSorageValue(TOKEN_KEY);
+    const user = await getSorageValue('user');
+    if (token) {
+      setToken(token); // in real apps, decode and verify
+    }
+    if (user) {
+      setUser(user);
+    }
+    if (token && user?._id) {
+      setIsAuth(true);
+    }
+    setIsAuth(false);
+  };
 
   useEffect(() => {
     const bootstrap = async () => {
-      const token = await getSorageValue(TOKEN_KEY);
-      const user = await getSorageValue('user');
-      if (token) {
-        setToken(token); // in real apps, decode and verify
-      }
-      if (user) {
-        setUser(user);
-      }
+      handleIsAuth();
       setIsLoading(false);
     };
     bootstrap();
@@ -45,23 +54,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await storeValue('user', obj.user);
     setToken(token);
     setUser(obj.user);
+    setIsAuth(true);
   };
 
   const logout = async () => {
     await removeSorageValue(TOKEN_KEY);
     await removeSorageValue('user');
     setToken(null);
+    setUser(null);
+    setIsAuth(false);
+    Toastify('success', 'Logged out');
     Alert.alert('Logged out');
-  };
-  const isAuth = () => {
-    if (token && user?._id) {
-      return true;
-    }
-    return false;
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, isAuth: isAuth(), login, logout, isLoading }}>
+    <AuthContext.Provider value={{ token, user, isAuth, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

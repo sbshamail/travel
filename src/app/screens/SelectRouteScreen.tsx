@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Dimensions } from 'react-native';
 import { V, T } from '../../@core/tag';
@@ -56,6 +56,7 @@ export default function SelectRouteScreen() {
         setFrom={setFrom}
         setTo={setTo}
       />
+
       {/* Bottom buttons */}
       <V className="absolute bottom-10 left-4 right-4 gap-4 bg-transparent px-4">
         {!selecting ? (

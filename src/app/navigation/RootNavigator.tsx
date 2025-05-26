@@ -29,7 +29,9 @@ const RootNavigator = () => {
     <V className={`flex-1 ${theme}`}>
       <SafeAreaView className="flex-1 bg-background ">
         <StatusBar backgroundColor={ct.background} style={'auto'} />
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+          initialRouteName={isAuth ? 'Home' : 'Login'}
+          screenOptions={{ headerShown: false }}>
           {isAuth ? (
             <>
               <Stack.Screen name="Home" component={Home} />

@@ -32,7 +32,7 @@ export default function LoginScreen() {
 
       const res = await loginUser(data, setLoading);
 
-      if (res.success && res.token) {
+      if (res.token) {
         login(res);
         handleClose();
       }

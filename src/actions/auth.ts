@@ -16,6 +16,7 @@ export async function registerUser(
     api: 'auth/register',
     body: data,
     setLoading: setLoading,
+    showToast: true,
   });
 }
 
@@ -27,5 +28,6 @@ export async function loginUser(
     api: 'auth/login',
     body: data,
     setLoading,
+    showToast: true,
   });
 }

@@ -5,9 +5,9 @@ import Nav from '../../components/Nav';
 import { Footer } from '../../components/Footer';
 import { V, T } from '../../@core/tag';
 import { useTheme } from '../../@core/theme/themeContext';
-import { Text } from 'react-native';
-import LoginScreen from './auth/Login';
+
 import SelectRouteScreen from './SelectRouteScreen';
+import RideForm from '@/components/forms/Ride';
 
 // import LoginScreen from './Login';
 export default function Home() {
@@ -19,19 +19,9 @@ export default function Home() {
     <>
       <V className="flex-1">
         <Nav />
-        <SelectRouteScreen />
-        {/* <LoginScreen /> */}
+        <RideForm />
+        {/* <SelectRouteScreen /> */}
       </V>
     </>
   );
-}
-{
-  /* <V className={`flex-1 items-center justify-center `}>
-            <TouchableOpacity onPress={toggleTheme}>
-              <T className="bg-primary px-4 py-2 text-primary-foreground rounded">
-                Switch to {theme === 'light' ? 'dark' : 'light'} mode
-              </T>
-            </TouchableOpacity>
-            <T className="text-xl ">Welcome to WeTravel!</T>
-          </V> */
 }
