@@ -32,7 +32,7 @@ const RootNavigator = () => {
         <Stack.Navigator
           initialRouteName={isAuth ? 'Home' : 'Login'}
           screenOptions={{ headerShown: false }}>
-          {isAuth ? (
+          {!isAuth ? (
             <>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="SelectRoute" component={SelectRouteScreen} />

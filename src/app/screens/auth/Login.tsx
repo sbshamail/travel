@@ -27,18 +27,14 @@ export default function LoginScreen() {
       return Alert.alert('Error', 'Please fill correctly');
     }
     const fullPhone = `${phone.country}${phone.number}`;
-    try {
-      let data = { phone: fullPhone, password };
 
-      const res = await loginUser(data, setLoading);
+    let data = { phone: fullPhone, password };
 
-      if (res.token) {
-        login(res);
-        handleClose();
-      }
-    } catch (err: any) {
-      console.log('Error', err.message);
-      Alert.alert('Error', err.message);
+    const res = await loginUser(data, setLoading);
+
+    if (res.token) {
+      login(res);
+      handleClose();
     }
   };
 

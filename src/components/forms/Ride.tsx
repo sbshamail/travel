@@ -6,8 +6,9 @@ import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { DatePickerHook } from '@/@core/tag/DatePicker';
 import { useState } from 'react';
-
+import { SelectDropdown } from '@/@core/tag/SelectDropdown';
 const schema = yup
   .object({
     carName: yup.string().required('Car name is required'),
@@ -52,7 +53,14 @@ export default function RideForm() {
   const onSubmit = (data: any) => {
     console.log('Ride data:', data);
   };
-
+  const carTypes = [
+    { label: 'Car', value: 'car' },
+    { label: 'Van', value: 'van' },
+    { label: 'Box', value: 'box' },
+    { label: 'Jeep', value: 'jeep' },
+    { label: 'Other', value: 'other' },
+  ];
+  console.log(watch());
   return (
     <ScrollView className="flex-1 gap-2 bg-background p-4">
       <T className="mb-4 text-center text-xl font-bold">Create Ride</T>
@@ -61,7 +69,6 @@ export default function RideForm() {
           control={control}
           name="carName"
           render={({ field: { onChange, value } }) => {
-            console.log(errors);
             return (
               <TInput
                 placeholder="Car Name"
@@ -89,13 +96,16 @@ export default function RideForm() {
         <Controller
           control={control}
           name="carType"
+          rules={{ required: 'Car type is required' }}
           render={({ field: { onChange, value } }) => (
-            <TInput
-              placeholder="Car Type"
-              value={value}
-              onChangeText={onChange}
-              error={errors?.carType}
-            />
+            <V className="mb-4">
+              <SelectDropdown
+                data={carTypes}
+                onChange={(t: any) => onChange(t.value)}
+                value={value}
+                error={errors.carType}
+              />
+            </V>
           )}
         />
 
@@ -147,32 +157,14 @@ export default function RideForm() {
             />
           )}
         />
-        <>
-          <Button variant="ghost" onPress={() => setShowDate(true)}>
-            Pick Date
-            {/* : {watch('arrivalTime')?.toLocaleString() || 'Select'} */}
-          </Button>
-          <Controller
-            control={control}
-            name="arrivalTime"
-            rules={{ required: 'Arrival time is required' }}
-            render={({ field }) => (
-              <T className="mb-2 text-sm text-muted">
-                {field.value ? new Date(field.value).toLocaleString() : 'No date selected'}
-              </T>
-            )}
-          />
-          {errors.arrivalTime && <T className="text-red-500">{errors.arrivalTime.message}</T>}
-          <DateTimePickerModal
-            isVisible={showDate}
-            mode="datetime"
-            onConfirm={(date) => {
-              setShowDate(false);
-              setValue('arrivalTime', date);
-            }}
-            onCancel={() => setShowDate(false)}
-          />
-        </>
+        <DatePickerHook
+          setShowDate={setShowDate}
+          showDate={showDate}
+          control={control}
+          error={errors.arrivalTime}
+          setValue={(date: Date) => setValue('arrivalTime', date)}
+        />
+
         <Button variant="primary" className="mt-4" onPress={handleSubmit(onSubmit)}>
           Submit Ride
         </Button>
