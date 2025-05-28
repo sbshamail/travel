@@ -37,8 +37,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     if (token && user?._id) {
       setIsAuth(true);
+    } else {
+      setIsAuth(false);
     }
-    setIsAuth(false);
   };
 
   useEffect(() => {
