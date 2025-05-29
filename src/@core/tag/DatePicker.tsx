@@ -3,13 +3,14 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { T, V } from '.';
 import { Button } from './Button';
 import { Dispatch, SetStateAction } from 'react';
+import { formatClientDateFromUtc } from '@/utils/helpers';
 
 interface DatePickerHookProps {
   control: Control<any>; // Replace `any` with your actual form schema if available
   error?: FieldError;
   showDate: boolean;
   setShowDate: Dispatch<SetStateAction<boolean>>;
-  setValue: (date: Date) => void;
+  setValue: (date: string) => void;
 }
 export const DatePickerHook = ({
   setShowDate,
@@ -30,7 +31,7 @@ export const DatePickerHook = ({
         rules={{ required: 'Arrival time is required' }}
         render={({ field }) => (
           <T className="mb-2 text-sm text-muted-foreground">
-            {field.value ? new Date(field.value).toLocaleString() : 'No date selected'}
+            {field.value ? formatClientDateFromUtc(field.value) : 'No date selected'}
           </T>
         )}
       />
@@ -40,7 +41,10 @@ export const DatePickerHook = ({
         mode="datetime"
         onConfirm={(date) => {
           setShowDate(false);
-          setValue(date);
+          const utcDateString = date.toISOString();
+          console.log({ utcDateString });
+
+          setValue(utcDateString);
         }}
         onCancel={() => setShowDate(false)}
       />

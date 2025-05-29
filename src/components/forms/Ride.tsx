@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import { ScrollView } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import { V, T, TInput } from '@/@core/tag';
 import { Button } from '@/@core/tag/Button';
 import { useTheme } from '@/@core/theme/themeContext';
-import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { DatePickerHook } from '@/@core/tag/DatePicker';
-import { useState } from 'react';
 import { SelectDropdown } from '@/@core/tag/SelectDropdown';
+import { SingleImagePicker } from '../previewImages/SingleImagePicker';
+import { MultiImagePicker } from '../previewImages/MultiImagePicker';
+
 const schema = yup
   .object({
     carName: yup.string().required('Car name is required'),
@@ -22,14 +24,14 @@ const schema = yup
       .min(1, 'At least one seat'),
     pricePerSeat: yup.number().typeError('Must be a number').optional(),
     notes: yup.string().optional(),
-    arrivalTime: yup.date().required('Arrival time is required'),
+    arrivalTime: yup.string().required('Arrival time is required'),
   })
   .required();
 
 export default function RideForm() {
   const { ct } = useTheme();
   const [showDate, setShowDate] = useState(false);
-
+  const [imageUri, setImageUri] = useState<string | null>(null);
   const {
     control,
     handleSubmit,
@@ -46,7 +48,7 @@ export default function RideForm() {
       seatsAvailable: undefined,
       pricePerSeat: undefined,
       notes: '',
-      arrivalTime: new Date(),
+      arrivalTime: new Date().toISOString(),
     },
   });
 
@@ -65,6 +67,14 @@ export default function RideForm() {
     <ScrollView className="flex-1 gap-2 bg-background p-4">
       <T className="mb-4 text-center text-xl font-bold">Create Ride</T>
       <V className="flex-1 flex-col gap-2">
+        <V className="w-[100px]">
+          <SingleImagePicker
+            imageUri={imageUri}
+            setImageUri={setImageUri}
+            title={'Pick Car Image'}
+          />
+        </V>
+        {/* <MultiImagePicker /> */}
         <Controller
           control={control}
           name="carName"
@@ -162,7 +172,7 @@ export default function RideForm() {
           showDate={showDate}
           control={control}
           error={errors.arrivalTime}
-          setValue={(date: Date) => setValue('arrivalTime', date)}
+          setValue={(date: string) => setValue('arrivalTime', date)}
         />
 
         <Button variant="primary" className="mt-4" onPress={handleSubmit(onSubmit)}>
