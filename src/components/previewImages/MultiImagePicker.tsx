@@ -5,8 +5,8 @@ import { V, T } from '@/@core/tag';
 import { Button } from '@/@core/tag/Button';
 
 interface MultiImagePickerProps {
-  imageUris: string[];
-  setImageUris: React.Dispatch<React.SetStateAction<string[]>>;
+  imageUris: string[] | null;
+  setImageUris: React.Dispatch<React.SetStateAction<string[]>> | any;
 }
 
 export const MultiImagePicker = ({ imageUris, setImageUris }: MultiImagePickerProps) => {
@@ -33,21 +33,24 @@ export const MultiImagePicker = ({ imageUris, setImageUris }: MultiImagePickerPr
   return (
     <>
       <V style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {imageUris.map((uri, idx) => (
-          <V key={idx} style={{ position: 'relative' }}>
-            <Pressable onPress={() => setPreviewUri(uri)}>
-              <Image source={{ uri }} style={{ width: 80, height: 80, borderRadius: 8 }} />
-            </Pressable>
-            <T
-              onPress={() => removeImage(idx)}
-              className="absolute right-[-8] top-[-8] z-10 h-5 w-5 rounded-full bg-red-600 text-center text-xs text-white">
-              ✕
-            </T>
-          </V>
-        ))}
+        {imageUris &&
+          imageUris.map((uri, idx) => (
+            <V key={idx} style={{ position: 'relative' }}>
+              <Pressable onPress={() => setPreviewUri(uri)}>
+                <Image source={{ uri }} style={{ width: 80, height: 80, borderRadius: 8 }} />
+              </Pressable>
+              <T
+                onPress={() => removeImage(idx)}
+                className="absolute right-[-8] top-[-8] z-10 h-5 w-5 rounded-full bg-red-600 text-center text-xs text-white">
+                ✕
+              </T>
+            </V>
+          ))}
       </V>
 
-      <Button onPress={pickMultipleImages}>Pick Multiple Images</Button>
+      <Button variant="accent" onPress={pickMultipleImages}>
+        Pick Multiple Images
+      </Button>
 
       <Modal visible={!!previewUri} transparent={true}>
         <Pressable

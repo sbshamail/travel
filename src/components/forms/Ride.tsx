@@ -10,6 +10,8 @@ import { DatePickerHook } from '@/@core/tag/DatePicker';
 import { SelectDropdown } from '@/@core/tag/SelectDropdown';
 import { SingleImagePicker } from '../previewImages/SingleImagePicker';
 import { MultiImagePicker } from '../previewImages/MultiImagePicker';
+import { createRide } from '@/actions/ride';
+import { Loader } from '../loader/Loader';
 
 const schema = yup
   .object({
@@ -32,6 +34,8 @@ export default function RideForm() {
   const { ct } = useTheme();
   const [showDate, setShowDate] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
+  const [imageUris, setImageUris] = useState<string[] | null>(null);
+  const [loading, setLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -52,8 +56,9 @@ export default function RideForm() {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log('Ride data:', data);
+  const onSubmit = async (data: any) => {
+    const res = await createRide(imageUri, imageUris, data, setLoading);
+    console.log(res);
   };
   const carTypes = [
     { label: 'Car', value: 'car' },
@@ -62,9 +67,10 @@ export default function RideForm() {
     { label: 'Jeep', value: 'jeep' },
     { label: 'Other', value: 'other' },
   ];
-  console.log(watch());
+
   return (
-    <ScrollView className="flex-1 gap-2 bg-background p-4">
+    <ScrollView className="flex-1 gap-2 bg-background p-4 pb-20">
+      <Loader loading={loading} />
       <T className="mb-4 text-center text-xl font-bold">Create Ride</T>
       <V className="flex-1 flex-col gap-2">
         <V className="w-[100px]">
@@ -74,7 +80,7 @@ export default function RideForm() {
             title={'Pick Car Image'}
           />
         </V>
-        {/* <MultiImagePicker /> */}
+
         <Controller
           control={control}
           name="carName"
@@ -174,10 +180,14 @@ export default function RideForm() {
           error={errors.arrivalTime}
           setValue={(date: string) => setValue('arrivalTime', date)}
         />
-
-        <Button variant="primary" className="mt-4" onPress={handleSubmit(onSubmit)}>
-          Submit Ride
-        </Button>
+        <V>
+          <MultiImagePicker imageUris={imageUris} setImageUris={setImageUris} />
+        </V>
+        <V className="pb-4">
+          <Button variant="primary" className="mt-4 " onPress={handleSubmit(onSubmit)}>
+            Submit Ride
+          </Button>
+        </V>
       </V>
     </ScrollView>
   );
