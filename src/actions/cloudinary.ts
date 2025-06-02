@@ -21,8 +21,7 @@ export const uploadToCloudinary = async (uri: string, folder?: string): Promise<
   if (folder) {
     data.append('folder', folder);
   }
-  // 🔽 Transformation to reduce width to 800px
-  data.append('transformation', JSON.stringify([{ width: 800, crop: 'scale' }]));
+
   const res = await fetch('https://api.cloudinary.com/v1_1/ddsoxxfqd/image/upload', {
     method: 'POST',
     body: data,

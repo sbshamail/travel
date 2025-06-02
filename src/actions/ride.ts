@@ -1,9 +1,10 @@
 import { uploadToCloudinary } from './cloudinary';
 import { apiFetcher } from './fetcher';
 import { Toastify } from '@/components/toast/Toastify';
+
 export async function createRide(
   carPicImage: string | null,
-  otherImages: string[] | null,
+  otherImages: string[],
   data: {
     arrivalTime: Date;
     carNumber: string;
@@ -18,13 +19,13 @@ export async function createRide(
   },
   setLoading?: (b: boolean) => void
 ) {
-  const carPicUrl = carPicImage ? await uploadToCloudinary(carPicImage, 'ride/') : '';
+  const carPicUrl = carPicImage ? await uploadToCloudinary(carPicImage, 'rides') : '';
 
   // 2. Upload otherImages (all except first)
   let otherImageUrls: null | string[] = [];
-  if (otherImages) {
+  if (otherImages && otherImages?.length > 0) {
     for (let i = 1; i < otherImages.length; i++) {
-      const url = await uploadToCloudinary(otherImages[i]);
+      const url = await uploadToCloudinary(otherImages[i], 'rides');
       otherImageUrls.push(url);
     }
   } else {
@@ -39,7 +40,7 @@ export async function createRide(
     };
 
     return apiFetcher({
-      api: 'auth/register',
+      api: 'ride/create',
       body: fullData,
       setLoading: setLoading,
       showToast: true,

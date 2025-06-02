@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Modal, ScrollView } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { V, T, TInput } from '@/@core/tag';
@@ -12,6 +12,7 @@ import { SingleImagePicker } from '../previewImages/SingleImagePicker';
 import { MultiImagePicker } from '../previewImages/MultiImagePicker';
 import { createRide } from '@/actions/ride';
 import { Loader } from '../loader/Loader';
+import SelectRouteJourney from '../project/SelectRouteJourney';
 
 const schema = yup
   .object({
@@ -27,24 +28,48 @@ const schema = yup
     pricePerSeat: yup.number().typeError('Must be a number').optional(),
     notes: yup.string().optional(),
     arrivalTime: yup.string().required('Arrival time is required'),
+    from: yup
+      .object({
+        latitude: yup.number().required(),
+        longitude: yup.number().required(),
+      })
+      .required('From location is required'),
+    to: yup
+      .object({
+        latitude: yup.number().required(),
+        longitude: yup.number().required(),
+      })
+      .required('To location is required'),
   })
   .required();
 
+interface ILocation {
+  latitude: number;
+  longitude: number;
+}
 export default function RideForm() {
   const { ct } = useTheme();
   const [showDate, setShowDate] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
-  const [imageUris, setImageUris] = useState<string[] | null>(null);
+  const [imageUris, setImageUris] = useState<string[]>([]);
+  const [routeModal, setRouteModal] = useState(false);
+  const [from, setFrom] = useState<ILocation | null>(null);
+  const [to, setTo] = useState<ILocation | null>(null);
+
   const [loading, setLoading] = useState(false);
+
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
     watch,
+    getValues,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
+      from: undefined,
+      to: undefined,
       carName: '',
       carNumber: '',
       carType: '',
@@ -55,6 +80,17 @@ export default function RideForm() {
       arrivalTime: new Date().toISOString(),
     },
   });
+  useEffect(() => {
+    if (from) {
+      setValue('from', from);
+    }
+  }, [from, setValue]);
+
+  useEffect(() => {
+    if (to) {
+      setValue('to', to);
+    }
+  }, [setValue, to]);
 
   const onSubmit = async (data: any) => {
     const res = await createRide(imageUri, imageUris, data, setLoading);
@@ -79,6 +115,12 @@ export default function RideForm() {
             setImageUri={setImageUri}
             title={'Pick Car Image'}
           />
+        </V>
+        <V className="flex-row items-center justify-between gap-2">
+          <Button onPress={() => setRouteModal(true)}>Select Location</Button>
+          <T className="text-xs text-muted-foreground">
+            {from && to ? 'From & To selected ✅' : 'Select From & To'}
+          </T>
         </V>
 
         <Controller
@@ -189,6 +231,15 @@ export default function RideForm() {
           </Button>
         </V>
       </V>
+      <Modal visible={routeModal} animationType="slide">
+        <SelectRouteJourney
+          from={from}
+          to={to}
+          setFrom={setFrom}
+          setTo={setTo}
+          onDone={() => setRouteModal(false)}
+        />
+      </Modal>
     </ScrollView>
   );
 }

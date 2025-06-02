@@ -32,3 +32,8 @@ export const isAuth = async () => {
   }
   return null;
 };
+
+export const getToken = async () => {
+  const token = await getSorageValue(TOKEN_KEY);
+  return token;
+};

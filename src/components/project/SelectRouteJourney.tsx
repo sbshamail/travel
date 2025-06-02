@@ -1,23 +1,40 @@
 import { useRef, useState } from 'react';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Dimensions } from 'react-native';
+import { Dimensions, Pressable } from 'react-native';
 import { V, T } from '../../@core/tag';
 import { Button } from '../../@core/tag/Button';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../../@core/theme/themeContext';
 import GooglePlacesAutoComplete from '@/components/project/GooglePlacesAutoComplete';
 
 const { width, height } = Dimensions.get('window');
 
-export default function SelectRouteScreen() {
+interface ILocation {
+  latitude: number;
+  longitude: number;
+}
+interface SelectRouteJourneyProps {
+  from: ILocation | null;
+  to: ILocation | null;
+  setFrom: (location: ILocation) => void;
+  setTo: (location: ILocation) => void;
+  onDone: () => void;
+}
+
+export default function SelectRouteJourney({
+  from,
+  to,
+  setFrom,
+  setTo,
+  onDone,
+}: SelectRouteJourneyProps) {
   const { ct } = useTheme();
   const mapRef = useRef<MapView>(null);
 
   const [selecting, setSelecting] = useState<'from' | 'to' | null>(null);
-  const [from, setFrom] = useState(null);
-  const [to, setTo] = useState(null);
   const [region, setRegion] = useState({
-    latitude: 33.6844,
-    longitude: 73.0479,
+    latitude: from?.latitude ?? 33.6844,
+    longitude: from?.longitude ?? 73.0479,
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
@@ -30,7 +47,7 @@ export default function SelectRouteScreen() {
   };
 
   return (
-    <V className="flex-1">
+    <V className=" flex-1">
       <MapView
         ref={mapRef}
         style={{ width, height }}
@@ -56,7 +73,11 @@ export default function SelectRouteScreen() {
         setFrom={setFrom}
         setTo={setTo}
       />
-
+      <V className="absolute left-4 top-10 !bg-transparent ">
+        <Pressable onPress={onDone} className="rounded-full border border-border p-2">
+          <Icon name="arrow-back" size={24} color={ct['muted-foreground']} />
+        </Pressable>
+      </V>
       {/* Bottom buttons */}
       <V className="absolute bottom-10 left-4 right-4 gap-4 bg-transparent px-4">
         {!selecting ? (

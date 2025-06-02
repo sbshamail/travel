@@ -1,5 +1,6 @@
 import { API_URL } from 'config';
 import { Toastify } from '@/components/toast/Toastify';
+import { getToken } from '@/utils/asyncStorage';
 type FetcherOptions = {
   api?: string;
   domain?: string;
@@ -13,15 +14,16 @@ type FetcherOptions = {
 
 export async function apiFetcher<T = any>({
   api,
-  domain = API_URL || 'http://192.168.18.17:4000/api',
+  domain = 'http://192.168.18.17:4000/api',
   method = 'POST',
   body,
   headers = {},
-  token,
   setLoading,
   showToast,
 }: FetcherOptions) {
   console.log(API_URL);
+  const token = await getToken();
+  console.log(token);
   const finalHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
     ...headers,

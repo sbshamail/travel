@@ -5,12 +5,11 @@ import { V, T } from '@/@core/tag';
 import { Button } from '@/@core/tag/Button';
 
 interface MultiImagePickerProps {
-  imageUris: string[] | null;
-  setImageUris: React.Dispatch<React.SetStateAction<string[]>> | any;
+  imageUris: string[];
+  setImageUris: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const MultiImagePicker = ({ imageUris, setImageUris }: MultiImagePickerProps) => {
-  //   const [imageUris, setImageUris] = useState<string[]>([]);
   const [previewUri, setPreviewUri] = useState<string | null>(null);
 
   const pickMultipleImages = async () => {
@@ -56,7 +55,9 @@ export const MultiImagePicker = ({ imageUris, setImageUris }: MultiImagePickerPr
         <Pressable
           style={{ flex: 1, backgroundColor: 'black' }}
           onPress={() => setPreviewUri(null)}>
-          <Image source={{ uri: previewUri || '' }} style={{ flex: 1, resizeMode: 'contain' }} />
+          {previewUri && (
+            <Image source={{ uri: previewUri }} style={{ flex: 1, resizeMode: 'contain' }} />
+          )}
         </Pressable>
       </Modal>
     </>

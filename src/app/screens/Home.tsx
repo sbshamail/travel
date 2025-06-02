@@ -6,7 +6,6 @@ import { Footer } from '../../components/Footer';
 import { V, T } from '../../@core/tag';
 import { useTheme } from '../../@core/theme/themeContext';
 
-import SelectRouteScreen from './SelectRouteScreen';
 import RideForm from '@/components/forms/Ride';
 
 // import LoginScreen from './Login';
@@ -20,7 +19,6 @@ export default function Home() {
       <V className="flex-1">
         <Nav />
         <RideForm />
-        {/* <SelectRouteScreen /> */}
       </V>
     </>
   );
