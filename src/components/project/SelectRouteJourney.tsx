@@ -38,7 +38,7 @@ export default function SelectRouteJourney({
     latitudeDelta: 0.05,
     longitudeDelta: 0.05,
   });
-  console.log({ from, to });
+
   const handleConfirm = () => {
     if (!region) return;
     if (selecting === 'from') setFrom(region);
@@ -60,7 +60,7 @@ export default function SelectRouteJourney({
 
       {/* Fixed marker pointer */}
       {selecting && (
-        <V className="absolute left-1/2 top-1/2 z-10 -ml-4  bg-transparent">
+        <V className="absolute left-1/2 top-1/2 z-10 -ml-4 -mt-8 -translate-y-1/2 bg-transparent">
           <T className="mb-2 text-center text-sm font-semibold text-muted">
             Move map to select {selecting === 'from' ? 'Start' : 'Destination'}
           </T>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Modal, ScrollView } from 'react-native';
+import { useState } from 'react';
+import { ScrollView } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { V, T, TInput } from '@/@core/tag';
@@ -8,12 +8,12 @@ import { useTheme } from '@/@core/theme/themeContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DatePickerHook } from '@/@core/tag/DatePicker';
 import { SelectDropdown } from '@/@core/tag/SelectDropdown';
-import { SingleImagePicker } from '../previewImages/SingleImagePicker';
-import { MultiImagePicker } from '../previewImages/MultiImagePicker';
+import { SingleImagePicker } from '../../previewImages/SingleImagePicker';
+import { MultiImagePicker } from '../../previewImages/MultiImagePicker';
 import { createRide } from '@/actions/ride';
-import { Loader } from '../loader/Loader';
-import SelectRouteJourney from '../project/SelectRouteJourney';
+import { Loader } from '../../loader/Loader';
 
+import { FromToLocation } from './FromToLocation';
 const schema = yup
   .object({
     carName: yup.string().required('Car name is required'),
@@ -40,21 +40,16 @@ const schema = yup
         longitude: yup.number().required(),
       })
       .required('To location is required'),
+    fromLocation: yup.string().required('From Location is required'),
+    toLocation: yup.string().required('To Location is required'),
   })
   .required();
 
-interface ILocation {
-  latitude: number;
-  longitude: number;
-}
 export default function RideForm() {
   const { ct } = useTheme();
   const [showDate, setShowDate] = useState(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [imageUris, setImageUris] = useState<string[]>([]);
-  const [routeModal, setRouteModal] = useState(false);
-  const [from, setFrom] = useState<ILocation | null>(null);
-  const [to, setTo] = useState<ILocation | null>(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -65,11 +60,14 @@ export default function RideForm() {
     formState: { errors },
     watch,
     getValues,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       from: undefined,
       to: undefined,
+      fromLocation: '',
+      toLocation: '',
       carName: '',
       carNumber: '',
       carType: '',
@@ -80,20 +78,13 @@ export default function RideForm() {
       arrivalTime: new Date().toISOString(),
     },
   });
-  useEffect(() => {
-    if (from) {
-      setValue('from', from);
-    }
-  }, [from, setValue]);
-
-  useEffect(() => {
-    if (to) {
-      setValue('to', to);
-    }
-  }, [setValue, to]);
 
   const onSubmit = async (data: any) => {
     const res = await createRide(imageUri, imageUris, data, setLoading);
+    reset();
+    setImageUri(null);
+    setImageUris([]);
+
     console.log(res);
   };
   const carTypes = [
@@ -109,20 +100,15 @@ export default function RideForm() {
       <Loader loading={loading} />
       <T className="mb-4 text-center text-xl font-bold">Create Ride</T>
       <V className="flex-1 flex-col gap-2">
-        <V className="w-[100px]">
+        <V className="w-[120px] flex-1 items-center justify-center ">
           <SingleImagePicker
             imageUri={imageUri}
             setImageUri={setImageUri}
             title={'Pick Car Image'}
+            previewImageClass={`${!imageUri ? 'border border-red-500' : ''} `}
           />
         </V>
-        <V className="flex-row items-center justify-between gap-2">
-          <Button onPress={() => setRouteModal(true)}>Select Location</Button>
-          <T className="text-xs text-muted-foreground">
-            {from && to ? 'From & To selected ✅' : 'Select From & To'}
-          </T>
-        </V>
-
+        <FromToLocation setValue={setValue} control={control} errors={errors} />
         <Controller
           control={control}
           name="carName"
@@ -231,15 +217,6 @@ export default function RideForm() {
           </Button>
         </V>
       </V>
-      <Modal visible={routeModal} animationType="slide">
-        <SelectRouteJourney
-          from={from}
-          to={to}
-          setFrom={setFrom}
-          setTo={setTo}
-          onDone={() => setRouteModal(false)}
-        />
-      </Modal>
     </ScrollView>
   );
 }

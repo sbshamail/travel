@@ -6,7 +6,7 @@ import { Footer } from '../../components/Footer';
 import { V, T } from '../../@core/tag';
 import { useTheme } from '../../@core/theme/themeContext';
 
-import RideForm from '@/components/forms/Ride';
+import RideForm from '@/components/forms/Ride/Ride';
 
 // import LoginScreen from './Login';
 export default function Home() {

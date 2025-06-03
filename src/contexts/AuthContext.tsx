@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<Record<string, any> | null>(null);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(user, token);
+
   const handleIsAuth = async () => {
     const token = await getSorageValue(TOKEN_KEY);
     const user = await getSorageValue('user');
