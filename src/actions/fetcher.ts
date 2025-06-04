@@ -21,9 +21,7 @@ export async function apiFetcher<T = any>({
   setLoading,
   showToast,
 }: FetcherOptions) {
-  console.log(API_URL);
   const token = await getToken();
-  console.log(token);
   const finalHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
     ...headers,

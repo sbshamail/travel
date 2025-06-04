@@ -14,6 +14,7 @@ import { createRide } from '@/actions/ride';
 import { Loader } from '../../loader/Loader';
 
 import { FromToLocation } from './FromToLocation';
+import { Toastify } from '@/components/toast/Toastify';
 const schema = yup
   .object({
     carName: yup.string().required('Car name is required'),
@@ -25,7 +26,8 @@ const schema = yup
       .typeError('Must be a number')
       .required('Seats required')
       .min(1, 'At least one seat'),
-    pricePerSeat: yup.number().typeError('Must be a number').optional(),
+    pricePerSeat: yup.number().optional(),
+    totalPrice: yup.number().optional(),
     notes: yup.string().optional(),
     arrivalTime: yup.string().required('Arrival time is required'),
     from: yup
@@ -78,9 +80,14 @@ export default function RideForm() {
       arrivalTime: new Date().toISOString(),
     },
   });
-
+  console.log(errors);
   const onSubmit = async (data: any) => {
+    const { totalPrice, pricePerSeat } = data;
+    if (!totalPrice && !pricePerSeat) {
+      return Toastify('error', 'One is required Total Price Or Price Per Seat');
+    }
     const res = await createRide(imageUri, imageUris, data, setLoading);
+
     reset();
     setImageUri(null);
     setImageUris([]);
@@ -157,7 +164,7 @@ export default function RideForm() {
           control={control}
           name="carModel"
           render={({ field: { onChange, value } }) => (
-            <TInput placeholder="Car Model" value={value} onChangeText={onChange} />
+            <TInput placeholder="Car Model (Optional)" value={value} onChangeText={onChange} />
           )}
         />
 
@@ -180,7 +187,19 @@ export default function RideForm() {
           name="pricePerSeat"
           render={({ field: { onChange, value } }) => (
             <TInput
-              placeholder="Price Per Seat (Optional)"
+              placeholder="Price Per Seat (optional)"
+              keyboardType="numeric"
+              value={value?.toString()}
+              onChangeText={(text) => onChange(Number(text))}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="totalPrice"
+          render={({ field: { onChange, value } }) => (
+            <TInput
+              placeholder="Whole Vehicle Booking Price (optional)"
               keyboardType="numeric"
               value={value?.toString()}
               onChangeText={(text) => onChange(Number(text))}
