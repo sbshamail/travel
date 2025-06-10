@@ -49,3 +49,11 @@ export async function createRide(
     return Toastify('success', 'Required Car Image');
   }
 }
+
+export async function listRide(setLoading?: (b: boolean) => void) {
+  return await apiFetcher({
+    method: 'GET',
+    api: 'ride/list',
+    setLoading: setLoading,
+  });
+}
