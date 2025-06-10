@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { V, T } from '../../@core/tag';
 import { listRide } from '@/actions/ride';
-
+import { Image } from 'react-native';
+const carPlaceholder = 'https://via.placeholder.com/320x180?text=No+Image';
 export default function RideList() {
   const [rides, setRides] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -15,19 +16,43 @@ export default function RideList() {
 
   return (
     rides &&
-    rides?.length > 0 && (
-      <V className="flex-1  p-4">
-        <T className="mb-4 text-xl font-bold">Available Rides</T>
-        {rides.map((ride: any, index) => (
-          <V key={index} className="mb-4 rounded-xl p-4 shadow">
-            <T className="text-lg font-semibold">
-              {ride.fromLocation} → {ride.toLocation}
-            </T>
-            <T className="text-sm ">{new Date(ride.arrivalTime).toLocaleString()}</T>
-            <T className="text-sm">Seats: {ride.seatsAvailable}</T>
-            <T className="text-sm">Price: Rs. {ride.pricePerSeat}</T>
-          </V>
-        ))}
+    rides.length > 0 && (
+      <V className="min-h-screen flex-1 bg-gray-50 p-4">
+        <T className="mb-6 text-center text-2xl font-extrabold text-indigo-700">Available Rides</T>
+        <V className="grid grid-cols-2 gap-6 ">
+          {rides.map((ride: any, index) => (
+            <V
+              key={index}
+              className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-lg transition-transform hover:scale-105">
+              <Image
+                source={{ uri: ride.carPic || carPlaceholder }}
+                style={{
+                  width: '100%',
+                  height: 120,
+                }}
+                resizeMode="cover"
+              />
+              <V style={{ padding: 12 }}>
+                <T>
+                  {ride.fromLocation} → {ride.toLocation}
+                </T>
+                <T>{new Date(ride.arrivalTime).toLocaleString()}</T>
+                <T>
+                  {ride.carName} {ride.carModel ? `(${ride.carModel})` : ''}
+                </T>
+                <T>
+                  {ride.carType} • {ride.carNumber}
+                </T>
+                <T>
+                  Rs {ride.pricePerSeat}
+                  {ride.negotiable ? <T> (Negotiable)</T> : null}
+                </T>
+                <T>Seats: {ride.seatsAvailable}</T>
+                {ride.notes ? <T>{ride.notes}</T> : null}
+              </V>
+            </V>
+          ))}
+        </V>
       </V>
     )
   );
