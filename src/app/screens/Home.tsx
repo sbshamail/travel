@@ -1,8 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Nav from '../../components/Nav';
-import { Footer } from '../../components/Footer';
 import { V, T } from '../../@core/tag';
 import { useTheme } from '../../@core/theme/themeContext';
 
