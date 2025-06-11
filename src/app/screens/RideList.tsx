@@ -1,59 +1,52 @@
 import { useEffect, useState } from 'react';
 import { V, T } from '../../@core/tag';
+import { Button } from '../../@core/tag/Button';
 import { listRide } from '@/actions/ride';
-import { Image } from 'react-native';
+import { FlatList, Image } from 'react-native';
+import RideListCard from '../screenComponents/ride/RideListCard';
+import { Loader } from '@/components/loader/Loader';
+import FilterRide from '../screenComponents/ride/FilterRide';
 const carPlaceholder = 'https://via.placeholder.com/320x180?text=No+Image';
 export default function RideList() {
   const [rides, setRides] = useState([]);
+  const [filterVisible, setFilterVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const fetchListRide = async () => {
-    const data = await listRide();
+    const data = await listRide(setLoading);
     setRides(data || []);
   };
   useEffect(() => {
     fetchListRide();
   }, []);
 
+  const loadRides = async (filters = {}) => {};
+
   return (
-    rides &&
-    rides.length > 0 && (
-      <V className="min-h-screen flex-1 bg-gray-50 p-4">
-        <T className="mb-6 text-center text-2xl font-extrabold text-indigo-700">Available Rides</T>
-        <V className="grid grid-cols-2 gap-6 ">
-          {rides.map((ride: any, index) => (
-            <V
-              key={index}
-              className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-lg transition-transform hover:scale-105">
-              <Image
-                source={{ uri: ride.carPic || carPlaceholder }}
-                style={{
-                  width: '100%',
-                  height: 120,
-                }}
-                resizeMode="cover"
-              />
-              <V style={{ padding: 12 }}>
-                <T>
-                  {ride.fromLocation} → {ride.toLocation}
-                </T>
-                <T>{new Date(ride.arrivalTime).toLocaleString()}</T>
-                <T>
-                  {ride.carName} {ride.carModel ? `(${ride.carModel})` : ''}
-                </T>
-                <T>
-                  {ride.carType} • {ride.carNumber}
-                </T>
-                <T>
-                  Rs {ride.pricePerSeat}
-                  {ride.negotiable ? <T> (Negotiable)</T> : null}
-                </T>
-                <T>Seats: {ride.seatsAvailable}</T>
-                {ride.notes ? <T>{ride.notes}</T> : null}
-              </V>
-            </V>
-          ))}
-        </V>
+    <>
+      <Button onPress={() => setFilterVisible(true)} className="mx-4 my-2">
+        Open Filters
+      </Button>
+
+      <V className="flex-1 p-4 ">
+        <Loader loading={loading} />
+
+        <FlatList
+          data={rides}
+          keyExtractor={(item: any) => item._id}
+          renderItem={({ item }) => <RideListCard ride={item} />}
+          numColumns={2}
+          columnWrapperStyle={{
+            justifyContent: 'space-between',
+            gap: 2, // spacing between items horizontally
+          }}
+          contentContainerStyle={{ paddingBottom: 80 }}
+        />
       </V>
-    )
+      <FilterRide
+        visible={filterVisible}
+        onClose={() => setFilterVisible(false)}
+        onApply={(filters: any) => loadRides(filters)}
+      />
+    </>
   );
 }

@@ -20,7 +20,7 @@ const schema = yup
     carName: yup.string().required('Car name is required'),
     carNumber: yup.string().required('Car number is required'),
     carType: yup.string().required('Car type is required'),
-    carModel: yup.string().optional(),
+    carModel: yup.number().optional(),
     seatsAvailable: yup
       .number()
       .typeError('Must be a number')
@@ -73,7 +73,7 @@ export default function RideForm() {
       carName: '',
       carNumber: '',
       carType: '',
-      carModel: '',
+      carModel: undefined,
       seatsAvailable: undefined,
       pricePerSeat: undefined,
       notes: '',
@@ -164,7 +164,12 @@ export default function RideForm() {
           control={control}
           name="carModel"
           render={({ field: { onChange, value } }) => (
-            <TInput placeholder="Car Model (Optional)" value={value} onChangeText={onChange} />
+            <TInput
+              keyboardType="numeric"
+              placeholder="Car Model (Optional)"
+              value={value?.toString()}
+              onChangeText={onChange}
+            />
           )}
         />
 

@@ -12,7 +12,7 @@ interface LoaderProps {
 
 export const Loader = ({
   fullscreen = true,
-  loading,
+  loading = true,
   size = 'large',
   message,
   style,

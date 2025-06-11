@@ -21,18 +21,40 @@ export const getReadableAddress = async (
   longitude: number,
   setValue?: (str: string) => void
 ) => {
-  const apiKey = GOOGLE_MAPS_API_KEY; // Replace this
+  const apiKey = GOOGLE_MAPS_API_KEY;
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+
   try {
     const response = await fetch(url);
     const data = await response.json();
 
     if (data.status === 'OK') {
+      const components = data.results[0].address_components;
+
+      const sector =
+        components.find(
+          (c: any) => c.types.includes('sublocality') || c.types.includes('neighborhood')
+        )?.long_name || '';
+
+      const city =
+        components.find(
+          (c: any) =>
+            c.types.includes('locality') || c.types.includes('administrative_area_level_2')
+        )?.long_name || '';
+
+      // we do array to handle if sector not found
+      const parts = [];
+      if (sector) parts.push(sector);
+      if (city) parts.push(city);
+
+      const formatted = parts.join(', ');
+
       if (setValue) {
-        setValue(data.results[0].formatted_address);
+        setValue(formatted);
       }
-      console.log(data.results[0].formatted_address);
-      return data.results[0].formatted_address; // Full readable address
+
+      console.log(formatted);
+      return formatted;
     } else {
       throw new Error('Geocoding failed');
     }

@@ -44,8 +44,9 @@ export async function apiFetcher<T = any>({
       setLoading(false);
     }
     const response = await res.json();
+
     if (showToast) {
-      Toastify('success', response.message);
+      Toastify(response.status.toLowerCase() ?? 'success', response.message);
     }
     if (response.data) {
       return response.data;

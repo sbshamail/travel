@@ -25,9 +25,11 @@ interface TInputType extends TextInputProps {
   theme?: Record<styleKey, string>;
   className?: ClassNameType;
   error?: Record<string, string | any>;
+  label?: string;
 }
-export const TInput = ({ theme, className, error, ...props }: TInputType) => (
+export const TInput = ({ theme, className, error, label, ...props }: TInputType) => (
   <>
+    {label && <T className="mb-1 text-sm font-medium text-foreground">{label}</T>}
     <TextInput
       placeholderTextColor={theme?.['muted-foreground'] ?? '#A1A1AA'}
       className={`w-full rounded-xl border border-border bg-accent p-3 text-foreground ${className}`}

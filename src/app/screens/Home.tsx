@@ -3,7 +3,7 @@ import Nav from '../../components/Nav';
 import { V, T } from '../../@core/tag';
 import { useTheme } from '../../@core/theme/themeContext';
 
-// import RideForm from '@/components/forms/Ride/Ride';
+import RideForm from '@/components/forms/Ride/Ride';
 import RideList from './RideList';
 
 // import LoginScreen from './Login';

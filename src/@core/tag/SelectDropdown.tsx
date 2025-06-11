@@ -7,11 +7,13 @@ interface SelectDropdownType {
   value?: string | undefined;
   onChange: (t: any) => void;
   error?: Record<string, string | any>;
+  label?: string;
 }
-export const SelectDropdown = ({ data, value, onChange, error }: SelectDropdownType) => {
+export const SelectDropdown = ({ data, value, onChange, label, error }: SelectDropdownType) => {
   const { ct } = useTheme();
   return (
     <>
+      {label && <T className="mb-1 text-sm font-medium text-foreground">{label}</T>}
       <Dropdown
         data={data}
         labelField="label"
