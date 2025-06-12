@@ -1,3 +1,4 @@
+import React from 'react';
 import { uploadToCloudinary } from './cloudinary';
 import { apiFetcher } from './fetcher';
 import { Toastify } from '@/components/toast/Toastify';
@@ -52,10 +53,17 @@ export async function createRide(
   }
 }
 
-export async function listRide(setLoading?: (b: boolean) => void) {
+type ListRideType = {
+  query: Record<string, any> | undefined;
+  setLoading?: (b: boolean) => void;
+  setValue?: React.Dispatch<React.SetStateAction<any>>;
+};
+export async function listRide({ query, setLoading, setValue }: ListRideType) {
   return await apiFetcher({
     method: 'GET',
     api: 'ride/list',
+    query,
+    setValue,
     setLoading: setLoading,
   });
 }

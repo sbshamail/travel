@@ -4,7 +4,7 @@ import { T } from '.';
 
 interface SelectDropdownType {
   data: Record<string, any>[];
-  value?: string | undefined;
+  value?: Record<string, any> | undefined;
   onChange: (t: any) => void;
   error?: Record<string, string | any>;
   label?: string;

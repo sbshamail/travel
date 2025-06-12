@@ -1,17 +1,11 @@
 // components/RideList/FilterDrawer.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { V, T, TInput } from '@/@core/tag';
 import { Button } from '@/@core/tag/Button';
 import { SelectDropdown } from '@/@core/tag/SelectDropdown';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Modal,
-  Pressable,
-} from 'react-native';
+import { Modal, Pressable } from 'react-native';
 import * as Location from 'expo-location';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { KeyboardInputScroll } from '@/components/wrapper/KeyboardInputScroll';
 
 const carTypes = [
   { label: 'Car', value: 'car' },
@@ -21,13 +15,34 @@ const carTypes = [
   { label: 'Other', value: 'other' },
 ];
 
-export default function FilterRide({ visible, onClose, onApply }: any) {
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
-  const [carType, setCarType] = useState('');
+interface FilterRideType {
+  visible: boolean;
+  onClose: () => void;
+  onApply: (filters: any) => void;
+}
+export default function FilterRide({
+  visible,
+  onClose,
+  onApply,
+}: FilterRideType) {
+  const [fromLocation, setFromLocation] = useState('');
+  const [toLocation, setToLocation] = useState('');
+  const [carType, setCarType] = useState<Record<string, any>>();
   const [useNearby, setUseNearby] = useState(false);
-  const [radius, setRadius] = useState('5000');
-  const insets = useSafeAreaInsets();
+  const [radius, setRadius] = useState('20');
+  const [filterValues, setFilterValues] = useState<boolean>();
+
+  const handleClearFilters = () => {
+    setFromLocation('');
+    setToLocation('');
+    setCarType(undefined);
+    setUseNearby(false);
+    setRadius('20');
+    setFilterValues(false);
+    // onApply(undefined);
+    // onClose();
+  };
+
   const handleGeolocationFilter = async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -37,18 +52,19 @@ export default function FilterRide({ visible, onClose, onApply }: any) {
       }
 
       const location = await Location.getCurrentPositionAsync({});
+      let data: Record<string, any> = {};
+      if (useNearby) {
+        data.fromLat = location.coords.latitude;
+        data.fromLng = location.coords.longitude;
+        data.radiusfrom = parseInt(radius);
+      }
       onApply({
-        from,
-        to,
-        carType,
-        geolocation: useNearby
-          ? {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-              radius: parseInt(radius),
-            }
-          : null,
+        fromLocation,
+        toLocation,
+        carType: carType?.value,
+        ...data,
       });
+      setFilterValues(true);
       onClose();
     } catch (error) {
       console.error('Error getting location:', error);
@@ -58,62 +74,64 @@ export default function FilterRide({ visible, onClose, onApply }: any) {
   return (
     <Modal visible={visible} animationType="fade" transparent>
       <V className="absolute inset-0 items-center justify-end bg-black/60"></V>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
-          keyboardShouldPersistTaps="handled">
-          <V className="mt-16 max-w-[300px] flex-1 gap-4 rounded-t-2xl bg-card p-4">
-            <T className="mb-4 text-lg font-bold">Filter Rides</T>
-
-            <TInput
-              label="From"
-              value={from}
-              onChangeText={setFrom}
-              placeholder="e.g. G-11 Islamabad"
-            />
-            <TInput
-              label="To"
-              value={to}
-              onChangeText={setTo}
-              placeholder="e.g. Blue Area"
-            />
-            <SelectDropdown
-              label="Car Type"
-              value={carType}
-              onChange={setCarType}
-              data={carTypes}
-            />
-
-            <V className="mt-4 flex flex-row gap-4 rounded-sm border border-accent  bg-transparent p-2">
-              <T className="mb-1">Use Nearby Location</T>
-              <Pressable onPress={() => setUseNearby(!useNearby)}>
-                <V
-                  className={`h-6 w-6 rounded border border-muted-foreground ${useNearby ? 'bg-primary' : 'bg-border'}`}
-                />
-              </Pressable>
-            </V>
-
-            {useNearby && (
-              <TInput
-                label="Radius (meters)"
-                value={radius}
-                onChangeText={setRadius}
-                keyboardType="numeric"
-              />
+      <KeyboardInputScroll>
+        <V className="mt-16 max-w-[300px] flex-1 gap-4 rounded-t-2xl bg-card p-4">
+          <V className="mb-4 flex flex-row items-center justify-between bg-transparent ">
+            <T className="text-lg font-bold">Filter Rides</T>
+            {filterValues && (
+              <Button
+                variant="ghost"
+                className="mt-2"
+                onPress={handleClearFilters}>
+                Clear Filters
+              </Button>
             )}
-
-            <Button className="mt-6" onPress={handleGeolocationFilter}>
-              Apply Filters
-            </Button>
-            <Button variant="ghost" className="mt-2" onPress={onClose}>
-              Cancel
-            </Button>
           </V>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          <TInput
+            label="From"
+            value={fromLocation}
+            onChangeText={setFromLocation}
+            placeholder="e.g. G-11 Islamabad"
+          />
+          <TInput
+            label="To"
+            value={toLocation}
+            onChangeText={setToLocation}
+            placeholder="e.g. Blue Area"
+          />
+          <SelectDropdown
+            label="Car Type"
+            value={carType}
+            onChange={setCarType}
+            data={carTypes}
+          />
+
+          <V className="mt-4 flex flex-row gap-4 rounded-sm border border-accent  bg-transparent p-2">
+            <T className="mb-1">Use Nearby Location</T>
+            <Pressable onPress={() => setUseNearby(!useNearby)}>
+              <V
+                className={`h-6 w-6 rounded border border-muted-foreground ${useNearby ? 'bg-primary' : 'bg-border'}`}
+              />
+            </Pressable>
+          </V>
+
+          {useNearby && (
+            <TInput
+              label="Radius (kms)"
+              value={radius}
+              onChangeText={setRadius}
+              keyboardType="numeric"
+            />
+          )}
+
+          <Button className="mt-6" onPress={handleGeolocationFilter}>
+            Apply Filters
+          </Button>
+          <Button variant="ghost" className="mt-2" onPress={onClose}>
+            Cancel
+          </Button>
+        </V>
+      </KeyboardInputScroll>
     </Modal>
   );
 }
