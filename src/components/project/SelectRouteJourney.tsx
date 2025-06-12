@@ -74,7 +74,9 @@ export default function SelectRouteJourney({
         setTo={setTo}
       />
       <V className="absolute left-4 top-10 !bg-transparent ">
-        <Pressable onPress={onDone} className="rounded-full border border-border p-2">
+        <Pressable
+          onPress={onDone}
+          className="rounded-full border border-border p-2">
           <Icon name="arrow-back" size={24} color={ct['muted-foreground']} />
         </Pressable>
       </V>

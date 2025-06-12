@@ -2,7 +2,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { V } from '../../@core/tag';
 import { useTheme } from '../../@core/theme/themeContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Footer } from '@/components/Footer';
 //screens
@@ -23,30 +26,24 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
   const { isAuth, isLoading } = useAuth();
-
+  const insets = useSafeAreaInsets();
   const { theme, ct } = useTheme();
   if (isLoading) return null; // or loading screen
   return (
-    <V className={`flex-1 ${theme}`}>
-      <SafeAreaView className="flex-1 bg-background ">
-        <StatusBar backgroundColor={ct.background} style={'auto'} />
-        <Stack.Navigator
-          initialRouteName={isAuth ? 'Home' : 'Login'}
-          screenOptions={{ headerShown: false }}>
-          {isAuth ? (
-            <>
-              <Stack.Screen name="Home" component={Home} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
-            </>
-          )}
-        </Stack.Navigator>
-        <Footer />
-      </SafeAreaView>
-    </V>
+    <SafeAreaView style={{ flex: 1 }} className={`bg-background ${theme}`}>
+      <StatusBar backgroundColor={ct.background} style="auto" />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {isAuth ? (
+          <Stack.Screen name="Home" component={Home} />
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Register" component={RegisterScreen} />
+          </>
+        )}
+      </Stack.Navigator>
+      <Footer />
+    </SafeAreaView>
   );
 };
 

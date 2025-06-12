@@ -19,7 +19,9 @@ export async function createRide(
   },
   setLoading?: (b: boolean) => void
 ) {
-  const carPicUrl = carPicImage ? await uploadToCloudinary(carPicImage, 'rides') : '';
+  const carPicUrl = carPicImage
+    ? await uploadToCloudinary(carPicImage, 'rides')
+    : '';
 
   // 2. Upload otherImages (all except first)
   let otherImageUrls: null | string[] = [];

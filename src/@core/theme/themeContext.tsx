@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { Appearance } from 'react-native';
 import { useColorScheme } from 'nativewind';
 import { chooseColor } from './chooseColor';
@@ -42,7 +48,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     setColorScheme(theme); // ✅ Sync NativeWind on mount
   }, [theme]);
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, ct: chooseColor[color][theme] }}>
+    <ThemeContext.Provider
+      value={{ theme, toggleTheme, ct: chooseColor[color][theme] }}>
       {children}
     </ThemeContext.Provider>
   );

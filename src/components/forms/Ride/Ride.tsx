@@ -236,7 +236,10 @@ export default function RideForm() {
           <MultiImagePicker imageUris={imageUris} setImageUris={setImageUris} />
         </V>
         <V className="pb-4">
-          <Button variant="primary" className="mt-4 " onPress={handleSubmit(onSubmit)}>
+          <Button
+            variant="primary"
+            className="mt-4 "
+            onPress={handleSubmit(onSubmit)}>
             Submit Ride
           </Button>
         </V>

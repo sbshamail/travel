@@ -9,7 +9,10 @@ interface MultiImagePickerProps {
   setImageUris: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const MultiImagePicker = ({ imageUris, setImageUris }: MultiImagePickerProps) => {
+export const MultiImagePicker = ({
+  imageUris,
+  setImageUris,
+}: MultiImagePickerProps) => {
   const [previewUri, setPreviewUri] = useState<string | null>(null);
 
   const pickMultipleImages = async () => {
@@ -36,7 +39,10 @@ export const MultiImagePicker = ({ imageUris, setImageUris }: MultiImagePickerPr
           imageUris.map((uri, idx) => (
             <V key={idx} style={{ position: 'relative' }}>
               <Pressable onPress={() => setPreviewUri(uri)}>
-                <Image source={{ uri }} style={{ width: 80, height: 80, borderRadius: 8 }} />
+                <Image
+                  source={{ uri }}
+                  style={{ width: 80, height: 80, borderRadius: 8 }}
+                />
               </Pressable>
               <T
                 onPress={() => removeImage(idx)}
@@ -56,7 +62,10 @@ export const MultiImagePicker = ({ imageUris, setImageUris }: MultiImagePickerPr
           style={{ flex: 1, backgroundColor: 'black' }}
           onPress={() => setPreviewUri(null)}>
           {previewUri && (
-            <Image source={{ uri: previewUri }} style={{ flex: 1, resizeMode: 'contain' }} />
+            <Image
+              source={{ uri: previewUri }}
+              style={{ flex: 1, resizeMode: 'contain' }}
+            />
           )}
         </Pressable>
       </Modal>

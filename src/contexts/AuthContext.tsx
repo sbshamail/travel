@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { TOKEN_KEY, getSorageValue, removeSorageValue, storeValue } from '../utils/asyncStorage';
+import {
+  TOKEN_KEY,
+  getSorageValue,
+  removeSorageValue,
+  storeValue,
+} from '../utils/asyncStorage';
 import { Alert } from 'react-native';
 import { Toastify } from '@/components/toast/Toastify';
 
@@ -70,7 +75,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, isAuth, login, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ token, user, isAuth, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

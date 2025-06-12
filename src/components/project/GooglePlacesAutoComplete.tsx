@@ -13,10 +13,18 @@ const GooglePlacesAutoComplete = ({ selecting, mapRef, setFrom, setTo }) => {
     };
     if (selecting === 'from') {
       setFrom(location);
-      mapRef.current?.animateToRegion({ ...location, latitudeDelta: 0.01, longitudeDelta: 0.01 });
+      mapRef.current?.animateToRegion({
+        ...location,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
     } else {
       setTo(location);
-      mapRef.current?.animateToRegion({ ...location, latitudeDelta: 0.01, longitudeDelta: 0.01 });
+      mapRef.current?.animateToRegion({
+        ...location,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
     }
   };
   return (
@@ -79,7 +87,9 @@ const GooglePlacesAutoComplete = ({ selecting, mapRef, setFrom, setTo }) => {
             rankby: 'distance',
             radius: 1000, // <-- REQUIRED if using 'distance'
           }}
-          renderLeftButton={() => <View className="h-6 w-6 items-center justify-center"></View>}
+          renderLeftButton={() => (
+            <View className="h-6 w-6 items-center justify-center"></View>
+          )}
           textInputProps={{
             placeholderTextColor: 'gray',
             placeholder: 'Where do you want to go?',

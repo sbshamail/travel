@@ -31,7 +31,9 @@ export const DatePickerHook = ({
         rules={{ required: 'Arrival time is required' }}
         render={({ field }) => (
           <T className="mb-2 text-sm text-muted-foreground">
-            {field.value ? formatClientDateFromUtc(field.value) : 'No date selected'}
+            {field.value
+              ? formatClientDateFromUtc(field.value)
+              : 'No date selected'}
           </T>
         )}
       />

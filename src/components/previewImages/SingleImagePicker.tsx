@@ -62,7 +62,9 @@ export const SingleImagePicker = ({
           <Pressable onPress={pickSingleImage}>
             <Icon name="camera" size={24} color={ct['muted-foreground']} />
           </Pressable>
-          {title && <T className="mt-2 text-xs text-muted-foreground">{title}</T>}
+          {title && (
+            <T className="mt-2 text-xs text-muted-foreground">{title}</T>
+          )}
         </V>
       )}
 
@@ -70,7 +72,10 @@ export const SingleImagePicker = ({
         <Pressable
           style={{ flex: 1, backgroundColor: 'black' }}
           onPress={() => setPreviewVisible(false)}>
-          <Image source={{ uri: imageUri || '' }} style={{ flex: 1, resizeMode: 'contain' }} />
+          <Image
+            source={{ uri: imageUri || '' }}
+            style={{ flex: 1, resizeMode: 'contain' }}
+          />
         </Pressable>
       </Modal>
     </>

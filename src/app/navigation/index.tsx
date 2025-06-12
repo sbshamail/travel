@@ -3,6 +3,7 @@ import RootNavigator from './RootNavigator';
 import { ThemeProvider } from '@/@core/theme/themeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import Toast from 'react-native-toast-message';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Navigation = () => {
   return (
@@ -10,7 +11,9 @@ const Navigation = () => {
       <AuthProvider>
         <NavigationContainer>
           <ThemeProvider>
-            <RootNavigator />
+            <SafeAreaProvider>
+              <RootNavigator />
+            </SafeAreaProvider>
           </ThemeProvider>
         </NavigationContainer>
       </AuthProvider>

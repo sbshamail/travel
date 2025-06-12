@@ -1,6 +1,9 @@
 import { Toastify } from '@/components/toast/Toastify';
 
-export const uploadToCloudinary = async (uri: string, folder?: string): Promise<string> => {
+export const uploadToCloudinary = async (
+  uri: string,
+  folder?: string
+): Promise<string> => {
   const data = new FormData();
   // Get the correct MIME type based on file extension (optional)
   const mimeType = uri.endsWith('.png')
@@ -22,10 +25,13 @@ export const uploadToCloudinary = async (uri: string, folder?: string): Promise<
     data.append('folder', folder);
   }
 
-  const res = await fetch('https://api.cloudinary.com/v1_1/ddsoxxfqd/image/upload', {
-    method: 'POST',
-    body: data,
-  });
+  const res = await fetch(
+    'https://api.cloudinary.com/v1_1/ddsoxxfqd/image/upload',
+    {
+      method: 'POST',
+      body: data,
+    }
+  );
 
   if (!res.ok) {
     Toastify('error', 'Cloudinary upload failed');

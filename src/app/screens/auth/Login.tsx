@@ -54,7 +54,10 @@ export default function LoginScreen() {
               onChangeText={setPassword}
             />
 
-            <Button variant="primary" className="w-full" onPress={() => handleSubmit()}>
+            <Button
+              variant="primary"
+              className="w-full"
+              onPress={() => handleSubmit()}>
               Login
             </Button>
 

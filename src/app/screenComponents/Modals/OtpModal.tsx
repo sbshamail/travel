@@ -9,7 +9,12 @@ interface OtpModalProps {
   loading?: boolean;
 }
 
-export const OtpModal = ({ visible, onClose, onConfirm, loading }: OtpModalProps) => {
+export const OtpModal = ({
+  visible,
+  onClose,
+  onConfirm,
+  loading,
+}: OtpModalProps) => {
   const [otp, setOtp] = React.useState('');
 
   return (

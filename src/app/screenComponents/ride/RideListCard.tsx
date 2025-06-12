@@ -21,7 +21,9 @@ export default function RideListCard({ ride }: { ride: any }) {
           </T>
           <T className="mt-1 text-sm text-primary">
             Arrival Time:
-            <T className="font-normal">{formatClientDateFromUtc(ride.arrivalTime)} </T>
+            <T className="font-normal">
+              {formatClientDateFromUtc(ride.arrivalTime)}{' '}
+            </T>
           </T>
         </V>
       </Card>

@@ -9,11 +9,19 @@ interface SelectDropdownType {
   error?: Record<string, string | any>;
   label?: string;
 }
-export const SelectDropdown = ({ data, value, onChange, label, error }: SelectDropdownType) => {
+export const SelectDropdown = ({
+  data,
+  value,
+  onChange,
+  label,
+  error,
+}: SelectDropdownType) => {
   const { ct } = useTheme();
   return (
     <>
-      {label && <T className="mb-1 text-sm font-medium text-foreground">{label}</T>}
+      {label && (
+        <T className="mb-1 text-sm font-medium text-foreground">{label}</T>
+      )}
       <Dropdown
         data={data}
         labelField="label"
@@ -24,7 +32,7 @@ export const SelectDropdown = ({ data, value, onChange, label, error }: SelectDr
         onChange={onChange}
         style={{
           height: 50,
-          borderColor: error ? ct['destructive'] : ct['secondary-foreground'],
+          borderColor: error ? ct['destructive'] : ct['muted-foreground'],
           borderWidth: 1,
           borderRadius: 8,
           paddingHorizontal: 10,

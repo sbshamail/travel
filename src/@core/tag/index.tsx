@@ -1,5 +1,12 @@
 import React from 'react';
-import { Text, View, ViewProps, TextProps, TextInputProps, TextInput } from 'react-native';
+import {
+  Text,
+  View,
+  ViewProps,
+  TextProps,
+  TextInputProps,
+  TextInput,
+} from 'react-native';
 // export { Button } from "./Button";
 import { ClassNameType } from '../../utils/interfaces/commonTypes';
 import { styleKey } from '../theme/themeContext';
@@ -27,9 +34,17 @@ interface TInputType extends TextInputProps {
   error?: Record<string, string | any>;
   label?: string;
 }
-export const TInput = ({ theme, className, error, label, ...props }: TInputType) => (
+export const TInput = ({
+  theme,
+  className,
+  error,
+  label,
+  ...props
+}: TInputType) => (
   <>
-    {label && <T className="mb-1 text-sm font-medium text-foreground">{label}</T>}
+    {label && (
+      <T className="mb-1 text-sm font-medium text-foreground">{label}</T>
+    )}
     <TextInput
       placeholderTextColor={theme?.['muted-foreground'] ?? '#A1A1AA'}
       className={`w-full rounded-xl border border-border bg-accent p-3 text-foreground ${className}`}

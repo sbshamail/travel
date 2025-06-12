@@ -33,13 +33,15 @@ export const getReadableAddress = async (
 
       const sector =
         components.find(
-          (c: any) => c.types.includes('sublocality') || c.types.includes('neighborhood')
+          (c: any) =>
+            c.types.includes('sublocality') || c.types.includes('neighborhood')
         )?.long_name || '';
 
       const city =
         components.find(
           (c: any) =>
-            c.types.includes('locality') || c.types.includes('administrative_area_level_2')
+            c.types.includes('locality') ||
+            c.types.includes('administrative_area_level_2')
         )?.long_name || '';
 
       // we do array to handle if sector not found

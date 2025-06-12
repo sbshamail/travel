@@ -34,7 +34,12 @@ export default function RegisterScreen() {
     setValues(initialValues);
   };
   const handleSubmit = async (otp?: string | null) => {
-    if (!values.fullName.trim() || !phone || !password || password !== confirmPassword) {
+    if (
+      !values.fullName.trim() ||
+      !phone ||
+      !password ||
+      password !== confirmPassword
+    ) {
       return Alert.alert('Error', 'Please fill correctly');
     }
     const fullPhone = `${phone.country}${phone.number}`;
@@ -102,11 +107,17 @@ export default function RegisterScreen() {
               secureTextEntry
             />
 
-            <Button variant="primary" className="w-full" onPress={() => handleSubmit()}>
+            <Button
+              variant="primary"
+              className="w-full"
+              onPress={() => handleSubmit()}>
               Register
             </Button>
 
-            <Button variant="ghost" className="mt-4" onPress={() => navigation.navigate('Login')}>
+            <Button
+              variant="ghost"
+              className="mt-4"
+              onPress={() => navigation.navigate('Login')}>
               <T>Already have an account? Login</T>
             </Button>
           </V>

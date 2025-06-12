@@ -1,6 +1,20 @@
 // /getCountryList.ts
 import rawCountries from 'world-countries';
 
+// components/PhoneInput.tsx
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
+import Modal from 'react-native-modal';
+import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
+import { useTheme } from '../../@core/theme/themeContext';
+import { T, V } from '../../@core/tag';
+
 export interface CountryItem {
   name: string;
   code: string;
@@ -27,20 +41,6 @@ const getCountryList = (): CountryItem[] => {
       };
     });
 };
-
-// components/PhoneInput.tsx
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  TextInput,
-  Text,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
-import Modal from 'react-native-modal';
-import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
-import { useTheme } from '../../@core/theme/themeContext';
-import { T, V } from '../../@core/tag';
 // import { getCountryList, CountryItem } from '../utils/getCountryList';
 
 const countryList = getCountryList();
@@ -86,14 +86,13 @@ export const PhoneInput: React.FC<PhoneInputType> = ({ onChange, value }) => {
   };
   return (
     <V className="w-full ">
-      <V className="flex-row items-center border border-border rounded-xl px-2 py-2 !bg-accent ">
+      <V className="flex-row items-center rounded-xl border border-border !bg-accent px-2 py-2 ">
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
-          className="mr-2"
-        >
+          className="mr-2">
           <Text className="text-xl">{country.flag}</Text>
         </TouchableOpacity>
-        <T className="text-base text-muted-foreground mr-1">
+        <T className="mr-1 text-base text-muted-foreground">
           +{country.callingCode}
         </T>
         <TextInput
@@ -107,22 +106,20 @@ export const PhoneInput: React.FC<PhoneInputType> = ({ onChange, value }) => {
       </V>
 
       {!isValid && number.length > 0 && (
-        <Text className="text-red-500 mt-1 text-sm">Invalid phone number</Text>
+        <Text className="mt-1 text-sm text-red-500">Invalid phone number</Text>
       )}
 
       <Modal
         isVisible={modalVisible}
-        onBackdropPress={() => setModalVisible(false)}
-      >
-        <V className=" p-4 rounded-xl max-h-[60%] bg-card">
+        onBackdropPress={() => setModalVisible(false)}>
+        <V className=" max-h-[60%] rounded-xl bg-card p-4">
           <FlatList
             data={countryList}
             keyExtractor={(item) => item.code}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => selectCountry(item)}
-                className="py-2 border-b border-border "
-              >
+                className="border-b border-border py-2 ">
                 <T className="text-base ">
                   {item.flag} {item.name} (+{item.callingCode})
                 </T>

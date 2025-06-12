@@ -23,11 +23,15 @@ export default function RideList() {
 
   return (
     <>
-      <Button onPress={() => setFilterVisible(true)} className="mx-4 my-2">
-        Open Filters
-      </Button>
-
-      <V className="flex-1 p-4 ">
+      <V className="flex items-end">
+        <Button
+          variant="outline"
+          onPress={() => setFilterVisible(true)}
+          className="mx-4 my-2 w-40">
+          Open Filters
+        </Button>
+      </V>
+      <V className="flex-1 gap-2 px-4">
         <Loader loading={loading} />
 
         <FlatList
