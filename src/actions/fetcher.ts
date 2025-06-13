@@ -29,7 +29,7 @@ function buildQueryParams(query?: QueryParams): string {
 }
 export async function apiFetcher<T = any>({
   api,
-  domain = 'http://192.168.18.17:4000/api', //192.168.100.64
+  domain = 'http://192.168.100.64:4000/api', //192.168.18.17
   method = 'POST',
   body,
   query,
